@@ -1,0 +1,12 @@
+drop table project;
+drop table task;
+drop table note;
+drop table person;
+drop table person_token;
+drop table intervals;
+drop table contact;
+drop table activity;
+drop table project_person;
+drop table type;
+drop table contact;
+drop table context;

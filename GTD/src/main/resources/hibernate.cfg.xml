@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/gtd_testing</property>
+    <property name="hibernate.connection.username">Drugnanov</property>
+    <property name="hibernate.connection.password">Qazwsxedc369</property>
+
+    <!-- ************************** PRODUKCE ************************ -->
+    <!--<property name="hibernate.connection.url">jdbc:mysql://188.166.107.248:3306/gtd_testing</property>-->
+    <!--<property name="hibernate.connection.username">gtdremote</property>-->
+    <!--<property name="hibernate.connection.password">Qazwsxedc369</property>-->
+    <property name="hibernate.hbm2ddl.auto">validate</property>
+    <!--<property name="hibernate.hbm2ddl.auto">create</property>-->
+    <property name="hibernate.current_session_context_class">thread</property>
+	
+	<!--dummy change to trigger post-commit hook-->
+	
+	<!--c3p0 connection pool settings-->
+	<property name="hibernate.c3p0.min_size">3</property>
+	<property name="hibernate.c3p0.max_size">10</property>
+	<property name="hibernate.c3p0.timeout">6000</property>
+	<property name="hibernate.c3p0.max_statements">50</property>
+	<property name="hibernate.c3p0.idle_test_period">3600</property>
+	<property name="hibernate.c3p0.acquireRetryAttempts">0</property>
+	<property name="hibernate.c3p0.acquireRetryDelay">3000</property>
+	<property name="hibernate.c3p0.breakAfterAcquireFailure">false</property>
+	<property name="hibernate.c3p0.maxConnectionAge">6000</property>
+	<property name="hibernate.c3p0.maxIdleTimeExcessConnections">1800</property>
+	
+  
+    <mapping class="GTD.DL.DLEntity.Action"/>
+    <mapping class="GTD.DL.DLEntity.Task"/>
+    <mapping class="GTD.DL.DLEntity.Activity"/>
+    <mapping class="GTD.DL.DLEntity.Project"/>
+    <mapping class="GTD.DL.DLEntity.Person"/>
+    <mapping class="GTD.DL.DLEntity.Contact"/>
+    <mapping class="GTD.DL.DLEntity.Filter"/>
+    <mapping class="GTD.DL.DLEntity.Context"/>
+    <mapping class="GTD.DL.DLEntity.Interval"/>
+    <mapping class="GTD.DL.DLEntity.Note"/>
+    <mapping class="GTD.DL.DLEntity.Type"/>
+    <mapping class="GTD.DL.DLEntity.ActivityState"/>
+    <mapping class="GTD.DL.DLEntity.ContactType"/>
+    <mapping class="GTD.DL.DLEntity.PersonState"/>
+    <mapping class="GTD.DL.DLEntity.ProjectState"/>
+    <mapping class="GTD.DL.DLEntity.TaskState"/>
+    <mapping class="GTD.DL.DLEntity.PersonToken"/>
+    <mapping class="GTD.DL.DLEntity.NoteState"/>
+  </session-factory>
+</hibernate-configuration>

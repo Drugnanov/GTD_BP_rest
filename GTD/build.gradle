@@ -1,0 +1,136 @@
+buildscript {
+    ext {
+        springBootVersion = '1.1.9.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "http://download.java.net/maven/2"
+        }
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+//		classpath 'net.saliman:gradle-cobertura-plugin:2.2.4'
+    }
+}
+
+
+
+//plugins {
+//  id 'net.saliman.cobertura' version '2.2.5'
+//}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+//apply plugin: 'cobertura'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
+
+war {
+    baseName = 'gtd'
+    war {
+        baseName = 'gtd'
+//        version = '0.1'
+    }
+}
+
+sourceCompatibility = '1.7'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+//if (!hasProperty('mainClass')) {
+//    ext.mainClass = 'GTD.DL.hibernate.HibernateMain'
+//}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile 'org.hibernate:hibernate-core:4.3.6.Final'
+	compile 'org.hibernate:hibernate-c3p0:4.3.7.Final'
+	compile 'mysql:mysql-connector-java:5.1.31'
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-test")
+    compile("org.springframework:spring-web:4.0.3.RELEASE")
+	compile 'org.glassfish:javax.json:1.0.4'
+    compile 'commons-io:commons-io:2.4'
+    compile 'io.undertow:undertow-core:1.2.0.Beta6'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile 'org.springframework.security:spring-security-core:3.2.5.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-security:1.2.0.RELEASE'
+    compile 'com.google.apis:google-api-services-calendar:v3-rev119-1.19.1'
+    compile 'com.google.api-client:google-api-client:1.19.1'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.19.0'
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+    testCompile group: 'org.easymock', name: 'easymock', version: '3.2'
+    testCompile('com.google.apis:google-api-services-calendar:v3-rev119-1.19.1')
+    testCompile('com.google.api-client:google-api-client:1.19.1')
+    testCompile('com.google.oauth-client:google-oauth-client-jetty:1.19.0')
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+}
+
+jar {
+//    manifest {
+//        attributes ('Main-Class': 'GTD.DL.hibernate.HibernateMain')
+//    }
+    dependsOn configurations.runtime
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
+
+task copyToWildfly(type: Copy, dependsOn: bootRepackage) {
+    from 'build/libs/gtd.war'
+    into 'c:\\GTDsupport\\wildfly-8.2.0.Final\\standalone\\deployments\\'
+}
+
+//cobertura {
+//    coverageFormats = ['xml']				
+////    coverageIgnoreTrivial = true					
+//    coverageIgnores = ['org.slf4j.Logger.*']			
+//    coverageReportDir = new File("$buildDir/reports/cobertura")	
+//}
+
+jacoco {
+	reportsDir = file("$buildDir/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+			
+findbugs {
+	reportsDir = file("$buildDir/reports/findbugs")
+	ignoreFailures = true
+}
+
+checkstyle {
+	toolVersion = '6.2'
+	configFile = file("${project.projectDir}/src/main/resources/checkstyle_sun_checks.xml")
+	reportsDir = file("$buildDir/reports/checkstyle")
+	ignoreFailures = true
+}
+
+//test.finalizedBy(project.tasks.cobertura)
+test.finalizedBy(project.tasks.jacocoTestReport)
+//test.finalizedBy(project.tasks.findbugsMain)
+test.finalizedBy(project.tasks.checkstyleMain)
+
